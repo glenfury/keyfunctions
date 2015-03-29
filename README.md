@@ -3,10 +3,10 @@ Angular Module for handing key events
 
 examples:
 
-&lt;textarea kf-init kf-ctrl-s="SomeSaveFunction()"></textarea>
+&lt;textarea kf-init kf-ctrl-s="SomeSaveFunction()"&gt;&lt;/textarea>
 
-<textarea kf-init kf-enter="EnterPressed()"></textarea>
+&lt;textarea kf-init kf-enter="EnterPressed()"&gt;&lt;/textarea>
 
-<input type="text" kf-init kf-a="KeyAPressed()" />
+&lt;input type="text" kf-init kf-a="KeyAPressed()" /&gt;
 
-<input type="text" kf-init kf-alt-b="AltBPressed()" kf-2="Number2Pressed()" kf-shift-5="Shift5Pressed() />
+&lt;input type="text" kf-init kf-alt-b="AltBPressed()" kf-2="Number2Pressed()" kf-shift-5="Shift5Pressed() /&gt;
