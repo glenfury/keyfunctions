@@ -3,7 +3,7 @@ Angular Module for handing key events
 
 examples:
 
-<textarea kf-init kf-ctrl-s="SomeSaveFunction()"></textarea>
+&lt;textarea kf-init kf-ctrl-s="SomeSaveFunction()"></textarea>
 
 <textarea kf-init kf-enter="EnterPressed()"></textarea>
 
