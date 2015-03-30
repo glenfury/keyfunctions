@@ -1,6 +1,8 @@
 # keyfunctions
 Angular Module for handing key events
 
+http://plnkr.co/edit/3PPf8Y
+
 examples:
 
 &lt;textarea kf-init kf-ctrl-s="SomeSaveFunction()"&gt;&lt;/textarea>
