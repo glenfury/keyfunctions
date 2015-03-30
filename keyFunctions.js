@@ -1,5 +1,3 @@
-
-
 angular.module("keyFunctions", []).directive("kfInit",
     function () {
         var keycodes = {
@@ -129,6 +127,16 @@ angular.module("keyFunctions", []).directive("kfInit",
                 }
             }
         ];
+        var getFunction = function(keycode, modifier, successfunction, scope) {
+          return function(event) {
+                          if (event.which == keycode && modifier.evaluation(event)) {
+                                scope.$apply(function () {
+                                    scope.$eval(successfunction);
+                                });
+                                
+                            }
+                        };
+        }
 
         var actions = { defaultBind: "keydown keypress", down: "keydown", press: "keypress", up: "keyup" };
         return {
@@ -147,8 +155,10 @@ angular.module("keyFunctions", []).directive("kfInit",
                         }
                     }
                 }
+                var hasFunction = false
+                var keyTests= []
                 for (var a in attr) {
-                    if (a.indexOf("kf") == 0 && a != "kfInit") {
+                    if (a.indexOf("kf") === 0 && a != "kfInit") {
                         var modifier = modifiers[0];
                         for (var i = 1; i < modifiers.length; i++) {
                             if (a.indexOf(modifiers[i].name) == 2) {
@@ -157,25 +167,30 @@ angular.module("keyFunctions", []).directive("kfInit",
                             }
                         }
                         var key = a.substring(2 + modifier.name.length);
-                        if (key.length == 0) {
+                        if (key.length === 0) {
                             key = modifier.name;
                             modifier = modifiers[0];
                         }
                         if (!keycodes.hasOwnProperty(key)) {
                             throw "Invalid Key " + key;
                         }
+                        
 
                         var keycode = keycodes[key];
                         var myfunction = attr[a];
-                        el.bind(binds, function (event) {
-                            if (event.which == keycode && modifier.evaluation(event)) {
-                                scope.$apply(function () {
-                                    scope.$eval(myfunction);
-                                });
-                                event.preventDefault();
-                            }
-                        });
+                        keyTests.push(getFunction(keycode,modifier,myfunction,scope));
+                        
                     }
+                }
+                if (keyTests.length > 0)
+                {
+                  el.bind(binds, function (event) {
+                            for(var i=0; i< keyTests.length; i++)
+                            {
+                               keyTests[i](event);
+                            }
+                            event.preventDefault();
+                        });
                 }
             }
         };
