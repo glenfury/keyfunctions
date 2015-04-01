@@ -132,9 +132,11 @@ angular.module("keyFunctions", []).directive("kfInit",
                           if (event.which == keycode && modifier.evaluation(event)) {
                                 scope.$apply(function () {
                                     scope.$eval(successfunction);
+                                    
                                 });
-                                
+                                return true;
                             }
+                            return false;
                         };
         }
 
@@ -187,9 +189,10 @@ angular.module("keyFunctions", []).directive("kfInit",
                   el.bind(binds, function (event) {
                             for(var i=0; i< keyTests.length; i++)
                             {
-                               keyTests[i](event);
+                               if (keyTests[i](event)) {
+                               }
                             }
-                            event.preventDefault();
+                            
                         });
                 }
             }
