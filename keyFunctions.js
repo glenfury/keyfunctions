@@ -190,6 +190,7 @@ angular.module("keyFunctions", []).directive("kfInit",
                             for(var i=0; i< keyTests.length; i++)
                             {
                                if (keyTests[i](event)) {
+                                   event.preventDefault();
                                }
                             }
                             
