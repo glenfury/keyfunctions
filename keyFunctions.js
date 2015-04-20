@@ -127,13 +127,17 @@ angular.module("keyFunctions", []).directive("kfInit",
                 }
             }
         ];
-        var getFunction = function(keycode, modifier, successfunction, scope) {
+        var getFunction = function(keycode, modifier, successfunction, scope, preventDefault) {
           return function(event) {
                           if (event.which == keycode && modifier.evaluation(event)) {
                                 scope.$apply(function () {
                                     scope.$eval(successfunction);
                                     
                                 });
+                                if (preventDefault)
+                                {
+                                  event.preventDefault();
+                                }
                                 return true;
                             }
                             return false;
@@ -160,15 +164,21 @@ angular.module("keyFunctions", []).directive("kfInit",
                 var hasFunction = false
                 var keyTests= []
                 for (var a in attr) {
+                    var preventDefault = true;
+                    var prefixIndent = 2
                     if (a.indexOf("kf") === 0 && a != "kfInit") {
+                        if (a.indexOf("kfd") === 0) {
+                          prefixIndent = 3;
+                          preventDefault = false;
+                        }
                         var modifier = modifiers[0];
                         for (var i = 1; i < modifiers.length; i++) {
-                            if (a.indexOf(modifiers[i].name) == 2) {
+                            if (a.indexOf(modifiers[i].name) == prefixIndent) {
                                 modifier = modifiers[i];
                                 i = modifiers.length;
                             }
                         }
-                        var key = a.substring(2 + modifier.name.length);
+                        var key = a.substring(prefixIndent + modifier.name.length);
                         if (key.length === 0) {
                             key = modifier.name;
                             modifier = modifiers[0];
@@ -180,7 +190,7 @@ angular.module("keyFunctions", []).directive("kfInit",
 
                         var keycode = keycodes[key];
                         var myfunction = attr[a];
-                        keyTests.push(getFunction(keycode,modifier,myfunction,scope));
+                        keyTests.push(getFunction(keycode,modifier,myfunction,scope, preventDefault));
                         
                     }
                 }
@@ -189,9 +199,7 @@ angular.module("keyFunctions", []).directive("kfInit",
                   el.bind(binds, function (event) {
                             for(var i=0; i< keyTests.length; i++)
                             {
-                               if (keyTests[i](event)) {
-                                   event.preventDefault();
-                               }
+                               keyTests[i](event);
                             }
                             
                         });
